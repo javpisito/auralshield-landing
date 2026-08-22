@@ -1,15 +1,19 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { P9, ULTRAPODS, precioCOP } from '../products';
+import { P9, VARIANTES } from '../products';
 
 /**
  * REVISA LAS RESPUESTAS antes de publicar: los tiempos de envío y las
  * condiciones de garantía dependen de tu operación, no del proveedor.
  */
+const listaColores = VARIANTES.map((v) => v.nombre.toLowerCase())
+  .join(', ')
+  .replace(/, ([^,]*)$/, ' y $1');
+
 const QUESTIONS = [
   {
     q: '¿Cómo hago mi pedido?',
-    a: 'Escríbenos por WhatsApp con el modelo y el color que quieres. Confirmamos tus datos de envío y despachamos el mismo día o el siguiente día hábil.',
+    a: 'Elige el color, agrégalo al carrito y confirma tu compra. Si prefieres, también puedes escribirnos por WhatsApp y te acompañamos en todo el proceso.',
   },
   {
     q: '¿Puedo pagar cuando reciba el producto?',
@@ -17,19 +21,19 @@ const QUESTIONS = [
   },
   {
     q: '¿Cuánto demora el envío?',
-    a: 'Los pedidos salen desde Bogotá hacia todo el país. El tiempo exacto depende de tu ciudad; te lo confirmamos por WhatsApp antes de despachar.',
+    a: 'Los pedidos salen desde Bogotá hacia todo el país. El tiempo exacto depende de tu ciudad; te lo confirmamos antes de despachar.',
   },
   {
-    q: `¿Puedo elegir el color de los ${P9.nombre}?`,
-    a: `Sí, están disponibles en ${P9.colores.join(', ').replace(/, ([^,]*)$/, ' y $1')}. Indícanos tu preferencia al hacer el pedido y confirmamos disponibilidad.`,
+    q: '¿En qué colores están disponibles?',
+    a: `En ${VARIANTES.length}: ${listaColores}. Puedes verlos todos en la galería y elegir el tuyo antes de agregarlo al carrito.`,
   },
   {
-    q: '¿Cuál me conviene si trabajo o estudio desde casa?',
-    a: `Los ${P9.nombre} (${precioCOP(P9.precio)}), porque tienen micrófono integrado, cancelación de ruido y almohadillas over-ear pensadas para jornadas largas.`,
+    q: '¿Sirven para trabajar o estudiar desde casa?',
+    a: `Sí. Los ${P9.nombre} tienen micrófono integrado y cancelación de ruido, y las almohadillas over-ear están pensadas para jornadas largas, así que funcionan bien en reuniones virtuales.`,
   },
   {
-    q: '¿Los UltraPods sirven para hacer ejercicio?',
-    a: `Sí. Los ${ULTRAPODS.nombre} tienen certificación de resistencia al agua y un diseño ergonómico y ligero, así que aguantan el gimnasio y el sudor.`,
+    q: '¿Se pueden usar con cualquier celular?',
+    a: 'Sí. Se conectan por Bluetooth, así que funcionan con Android, iPhone, tablets y computadores que tengan Bluetooth.',
   },
   {
     q: '¿Tienen garantía?',
@@ -41,7 +45,7 @@ export default function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="w-full bg-paper px-6 py-24 sm:py-28">
+    <section id="preguntas" className="w-full bg-paper px-6 py-24 sm:py-28">
       <div className="mx-auto max-w-3xl">
         <motion.p
           initial={{ opacity: 0 }}

@@ -3,16 +3,18 @@ import Logo from '../components/Logo';
 import ScrambleText from '../components/ScrambleText';
 import MediaSlot from '../components/MediaSlot';
 import { MEDIA } from '../media';
-import { P9, TIENDA, ULTRAPODS, linkTienda, precioCOP } from '../products';
+import { useCarrito } from '../cart';
+import { P9, TIENDA, VARIANTES, precioCOP } from '../products';
 
 export default function Footer() {
   const [hovered, setHovered] = useState(false);
+  const { abrir } = useCarrito();
 
   return (
     <footer className="relative w-full overflow-hidden bg-bone">
       <div className="flex min-h-[440px] flex-col md:flex-row">
         <div className="relative h-[300px] w-full md:h-auto md:w-1/2">
-          <MediaSlot slot={MEDIA.p9[0]} />
+          <MediaSlot slot={MEDIA.footer} />
         </div>
 
         <div className="flex w-full flex-col justify-between p-10 sm:p-16 md:w-1/2">
@@ -29,21 +31,20 @@ export default function Footer() {
             </h2>
 
             <p className="mb-8 max-w-sm text-[13px] leading-relaxed text-ink/45 sm:text-[15px]">
-              {P9.nombre} por {precioCOP(P9.precio)} y {ULTRAPODS.nombre} por{' '}
-              {precioCOP(ULTRAPODS.precio)}. Envíos a todo Colombia desde {TIENDA.ciudad}.
+              {P9.nombre} por {precioCOP(P9.precio)}, en {VARIANTES.length} colores. Envíos a
+              todo Colombia desde {TIENDA.ciudad}.
             </p>
 
-            <a
-              href={linkTienda()}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={abrir}
               onMouseEnter={() => setHovered(true)}
               onMouseLeave={() => setHovered(false)}
               className="inline-flex h-12 items-center gap-2 rounded-full bg-ink px-7 text-[14px] text-bone transition-colors hover:bg-[#2b2622]"
             >
-              <i className="bi bi-whatsapp text-[15px]" />
-              <ScrambleText text="Escríbenos por WhatsApp" isHovered={hovered} />
-            </a>
+              <i className="bi bi-bag text-[15px]" />
+              <ScrambleText text="Ver mi carrito" isHovered={hovered} />
+            </button>
           </div>
 
           <div className="mt-12 flex flex-col gap-4 border-t border-ink/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
@@ -52,13 +53,13 @@ export default function Footer() {
             </p>
             <nav className="flex gap-5 text-[12px] text-ink/40">
               <a href="#p9" className="transition-colors hover:text-ink">
-                {P9.nombre}
+                Producto
               </a>
-              <a href="#ultrapods" className="transition-colors hover:text-ink">
-                {ULTRAPODS.nombre}
+              <a href="#colores" className="transition-colors hover:text-ink">
+                Colores
               </a>
-              <a href="#comparar" className="transition-colors hover:text-ink">
-                Comparar
+              <a href="#preguntas" className="transition-colors hover:text-ink">
+                Preguntas
               </a>
             </nav>
           </div>

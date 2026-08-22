@@ -1,130 +1,143 @@
 # Guía de contenidos
 
-Landing de dos productos: **Audífonos P9** (protagonista) y **UltraPods Pro**.
+Landing de un solo producto: **Audífonos P9**, en 6 colores, con carrito de compras.
 Todas las rutas son relativas a la carpeta `synapsex/`.
 
 ---
 
-## ⚠️ Antes de publicar
+## ⚠️ Los pendientes para vender
 
-1. **Nombre de la tienda.** Ahora dice `TU MARCA`. Cámbialo en `src/products.ts` → `TIENDA.nombre`.
-2. **WhatsApp.** Los 8 botones de "Pedir" no funcionan hasta que pongas tu número
-   en `src/products.ts` → `TIENDA.whatsapp` (formato `573001234567`, sin + ni espacios).
-3. **Fotos y video.** Ver la sección "Fotos y video" más abajo. Hoy se ven recuadros grises.
-4. **Tus políticas.** Revisa que sean ciertas: pago contra entrega, garantía y tiempos
-   de envío aparecen en `src/sections/TrustStrip.tsx` y en las respuestas de `src/sections/Faq.tsx`.
-5. **Datos que faltan del proveedor.** Horas de batería, versión de Bluetooth y peso del P9;
-   certificación IPX exacta de los UltraPods. Están listados en `porConfirmar` dentro de
-   `src/products.ts`. Mientras no los tengas, la tabla comparativa dice "No indicada" —
-   que es la verdad, y es mejor que inventar una cifra.
+### 1. El dominio de Shopify ← lo único que falta para cobrar
+
+Los 6 `variantId` ya están puestos y probados. Solo falta decirle a la landing a
+qué tienda mandar el carrito. **Ver `CHECKOUT-SHOPIFY.md`** para el paso a paso;
+en corto, es pegar tu dominio en `src/products.ts` → `DOMINIO_TIENDA`, o
+definir la variable `VITE_SHOPIFY_DOMINIO` en Vercel.
+
+Mientras falte, el botón del carrito **envía el pedido por WhatsApp** con el
+detalle escrito, en vez de romperse. Cuando esté puesto, cambia solo de
+"Enviar pedido por WhatsApp" a "Ir a pagar".
+
+### 2. Nombre de la tienda y WhatsApp
+
+**Archivo: `src/products.ts`** → objeto `TIENDA`. Hoy dice `TU MARCA` y el
+teléfono está vacío (formato: `573001234567`, sin + ni espacios).
+
+### 3. La segunda foto del hero
+
+Ver la tabla de la sección "Otras fotos y el video".
 
 ---
 
-## 1. Datos de los productos
+## Colores y fotos del producto
 
-**Archivo: `src/products.ts`** — es el único lugar donde se escriben precios y características.
+**Archivo: `src/products.ts`** → lista `VARIANTES`. Cada entrada tiene:
 
-| Qué | Dónde |
+| Campo | Para qué |
 |---|---|
-| Nombre de la tienda, WhatsApp, ciudad | Objeto `TIENDA` |
-| Audífonos P9: nombre, precio, descripción, colores, características | Constante `P9` |
-| UltraPods Pro: lo mismo | Constante `ULTRAPODS` |
-| Precio tachado (si haces promoción) | Campo `precioAntes`, hoy en `null` |
+| `nombre` | El texto que ve el cliente ("Negro") |
+| `hex` | El color del círculo del selector |
+| `imagen` | La foto que se muestra al elegir ese color |
+| `variantId` | El ID de tu pasarela |
 
-Precios actuales, tomados del "precio sugerido" de Dropi:
-**P9 $60.000** · **UltraPods Pro $25.000** (pesos colombianos).
+Las 6 fotos ya están puestas y optimizadas (de ~1,7 MB a ~100 KB cada una), y
+cada una está conectada a su ID de Shopify:
 
-Los bloques de características (`bloques`) son listas: agrega o quita viñetas libremente,
-y si agregas un bloque nuevo aparece solo en la página.
+| Color | Foto | variantId |
+|---|---|---|
+| Negro | `p9-negro.jpg` | 50989106200828 |
+| Gris | `p9-gris.jpg` | 50989106135292 |
+| Azul | `p9-azul.jpg` | 50989106102524 |
+| Verde | `p9-verde.jpg` | 50989106168060 |
+| Rosado claro | `p9-rosado-claro.jpg` | 50989106069756 |
+| Rosado oscuro | `p9-rosado-oscuro.jpg` | 50989106233596 |
+
+Para **agregar un color**: copia la foto a `public/`, y añade una entrada más a la
+lista. El selector, las miniaturas y el carrito lo toman solo.
+Para **quitar un color**: borra su línea.
 
 ---
 
-## 2. Fotos y video
+## Otras fotos y el video
 
 **Archivo: `src/media.ts`**
 
-Hoy hay 8 espacios vacíos. Cada uno muestra en pantalla el nombre de archivo que espera.
-Para llenarlos:
-
-1. Copia tu foto o video dentro de la carpeta `public/`.
-2. En `src/media.ts` cambia `src: null` por `src: '/nombre-del-archivo.jpg'`.
-3. Guarda. Listo.
-
 | Espacio | Archivo | Estado | Dónde se ve |
 |---|---|---|---|
-| `heroVideo` | `producto.mp4` | ✅ puesto | Primera pantalla, se recorre con el cursor |
-| `heroImagen` | `p9-hero.jpg` | ✅ puesto | Primera pantalla, si algún día quitas el video |
-| `p9[0]` | `p9-hero.jpg` | ✅ puesto | Galería P9 (foto grande) **y footer** |
-| `p9[1]` | `p9-colores.jpg` | ⬜ falta | Galería P9 |
-| `p9[2]` | `p9-uso.jpg` | ⬜ falta | Galería P9 |
-| `ultrapods[0]` | `ultrapods-1.jpg` | ✅ puesto | Galería UltraPods (foto grande) |
-| `ultrapods[1]` | `ultrapods-led.jpg` | ⬜ falta | Galería UltraPods |
-| `ultrapods[2]` | `ultrapods-uso.jpg` | ⬜ falta | Galería UltraPods |
+| `heroImagen` | `p9-hero.jpg` | ✅ puesto | Primera pantalla, foto grande |
+| `heroSecundaria` | `p9-hero-2.jpg` | ⬜ **falta** | Primera pantalla, recuadro pequeño |
+| `showcaseVideo` | `showcase.mp4` | ✅ puesto | Sección de colores |
+| `footer` | `p9-negro.jpg` | ✅ puesto | Footer |
 
-Faltan 4 fotos. Lo ideal para cada producto: una de detalle, una con los colores
-disponibles y una de alguien usándolo.
+Falta 1 foto: la segunda del hero. Mientras no esté, ahí se ve un recuadro gris
+con el nombre del archivo que espera.
 
-No tienes que usar esos nombres exactos; son solo una sugerencia. Cambia también el
-campo `alt` de cada uno: es el texto que lee Google y los lectores de pantalla.
+Para cambiar cualquiera: copia el archivo a `public/` y escribe la ruta con barra
+al inicio (ej. `src: '/p9-hero-2.jpg'`).
+
+> El video ya **no** está en el hero. Se movió a su propia sección con alto
+> controlado (62 % de la pantalla en móvil, 80 % en escritorio) porque a pantalla
+> completa se recortaba mal en celular. Solo se reproduce cuando está a la vista.
 
 ---
 
-## 3. Textos por sección
+## Textos por sección
 
 | Sección | Archivo | Qué se cambia |
 |---|---|---|
-| Barra superior | `src/components/Navbar.tsx` | `NAV_LINKS` (los enlaces del menú) |
-| Primera pantalla | `src/sections/Hero.tsx` | Titulares dentro de `<ScrambleIn text="...">`, el rótulo "Envío a todo Colombia" y la línea bajo el botón |
+| Barra superior | `src/components/Navbar.tsx` | `NAV_LINKS` |
+| Primera pantalla | `src/sections/Hero.tsx` | Titulares dentro de `<ScrambleIn text="...">` y el rótulo de arriba |
 | Cinta que se desplaza | `src/sections/TrustStrip.tsx` | Array `ITEMS` |
-| Ficha de cada producto | `src/sections/ProductFeature.tsx` | Es una plantilla: el contenido sale de `products.ts`. Aquí solo cambian los rótulos fijos ("Colores disponibles", "Pedir...") |
-| Tabla comparativa | `src/sections/Compare.tsx` | Array `FILAS` y el titular |
+| Ficha del producto | `src/sections/Producto.tsx` | Rótulos fijos. El nombre, precio y características salen de `products.ts` |
+| Características | `src/products.ts` | Lista `bloques` dentro de `P9` |
+| Sección de colores | `src/sections/Showcase.tsx` | Antetítulo y titular |
 | Preguntas frecuentes | `src/sections/Faq.tsx` | Array `QUESTIONS` |
+| Carrito | `src/components/CartDrawer.tsx` | Textos del panel lateral |
 | Footer | `src/sections/Footer.tsx` | Titular, texto y enlaces |
-| Pestaña del navegador y Google | `index.html` | `<title>` y `<meta name="description">` |
+| Pestaña y Google | `index.html` | `<title>` y `<meta name="description">` |
+
+**Revisa tus políticas** antes de publicar: "pago contra entrega", "garantía
+incluida" y los tiempos de envío aparecen en `TrustStrip.tsx`, `Producto.tsx`,
+`CartDrawer.tsx` y en las respuestas del FAQ.
 
 ---
 
-## 4. Orden de la página
+## Cómo funciona el carrito
 
-**Archivo: `src/App.tsx`** — para reordenar secciones, mover líneas. Para quitar una,
-borra su línea. Hoy el orden es:
+**Archivo: `src/cart.tsx`**
 
-1. Primera pantalla (P9)
-2. Cinta de garantías
-3. Ficha Audífonos P9
-4. Ficha UltraPods Pro
-5. Tabla comparativa
-6. Preguntas frecuentes
-7. Footer
-
-Si quieres que el protagonista sea el UltraPods, intercambia las dos líneas de
-`<ProductFeature .../>` y cambia el producto del hero en `src/sections/Hero.tsx`.
+- Guarda el pedido en el navegador (`localStorage`), así no se pierde si el
+  cliente recarga la página.
+- Si un color se elimina del catálogo, se descarta solo del carrito guardado.
+- El total se calcula con el precio de `P9.precio` por unidad.
+- El panel lateral se abre solo al añadir algo, y también desde el botón
+  "Carrito" de la barra o "Ver mi carrito" del footer.
 
 ---
 
-## 5. Testimonios
+## Datos que faltan del proveedor
 
-La sección de reseñas **se eliminó**. Tenía tres testimonios inventados y una
-calificación falsa, y eso no puede quedar en una página que vende productos reales.
-Cuando tengas reseñas de clientes de verdad, pídemelas y la vuelvo a montar.
+Horas de batería, versión de Bluetooth, peso y tamaño del driver. Están en el
+campo `porConfirmar` de `src/products.ts`. No los inventamos: mientras no los
+tengas, no aparecen en la página.
 
 ---
 
-## 6. Colores y tipografía
+## Colores del diseño y tipografía
 
 - Paleta: `tailwind.config.js` (`bone`, `paper`, `ink`, `walnut`, `gold`).
 - Los mismos valores están en `src/index.css` como variables CSS.
-- **Importante:** después de editar `tailwind.config.js` hay que reiniciar el servidor
-  (`Ctrl+C` y `npm run dev`), si no los colores nuevos no aparecen.
+- **Importante:** después de editar `tailwind.config.js` hay que reiniciar el
+  servidor (`Ctrl+C` y `npm run dev`), si no los colores nuevos no aparecen.
 
 ---
 
-## 7. Animaciones
+## Animaciones
 
-Ya están en un nivel suave y la página respeta la opción "reducir movimiento" del
+Están en un nivel suave y la página respeta la opción "reducir movimiento" del
 sistema operativo. Si quieres bajarlas más:
 
 - **Texto revuelto al cargar**: quita los `<ScrambleIn>` de `src/sections/Hero.tsx`.
-- **Texto revuelto al pasar el mouse**: borra los `<ScrambleText text="X" ...>` y escribe
-  `X` directamente (están en `Navbar.tsx`, `Hero.tsx`, `ProductFeature.tsx` y `Footer.tsx`).
+- **Texto revuelto al pasar el mouse**: borra los `<ScrambleText text="X" ...>` y
+  escribe `X` directamente (`Navbar.tsx`, `Hero.tsx`, `Producto.tsx`, `Footer.tsx`).
 - **Cinta que se desplaza sola**: en `src/index.css`, sube los `60s` de `.animate-marquee`.

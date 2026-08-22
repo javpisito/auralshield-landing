@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
+import CartDrawer from './components/CartDrawer';
 import Hero from './sections/Hero';
 import TrustStrip from './sections/TrustStrip';
-import ProductFeature from './sections/ProductFeature';
-import Compare from './sections/Compare';
+import Producto from './sections/Producto';
+import Showcase from './sections/Showcase';
 import Faq from './sections/Faq';
 import Footer from './sections/Footer';
-import { MEDIA } from './media';
-import { P9, ULTRAPODS } from './products';
+import { CarritoProvider } from './cart';
 
 export default function App() {
   const [entranceComplete, setEntranceComplete] = useState(false);
@@ -19,18 +19,22 @@ export default function App() {
   }, []);
 
   return (
-    <div
-      className="relative w-full bg-bone text-ink"
-      style={{ fontFamily: '"Space Mono", monospace' }}
-    >
-      <Navbar entranceComplete={entranceComplete} />
-      <Hero entranceComplete={entranceComplete} />
-      <TrustStrip />
-      <ProductFeature producto={P9} fotos={MEDIA.p9} indice="01" fondo="paper" />
-      <ProductFeature producto={ULTRAPODS} fotos={MEDIA.ultrapods} indice="02" fondo="bone" />
-      <Compare />
-      <Faq />
-      <Footer />
-    </div>
+    <CarritoProvider>
+      <div
+        className="relative w-full bg-bone text-ink"
+        style={{ fontFamily: '"Space Mono", monospace' }}
+      >
+        <Navbar entranceComplete={entranceComplete} />
+        <Hero entranceComplete={entranceComplete} />
+        <TrustStrip />
+        <Producto />
+        <div id="colores">
+          <Showcase />
+        </div>
+        <Faq />
+        <Footer />
+        <CartDrawer />
+      </div>
+    </CarritoProvider>
   );
 }

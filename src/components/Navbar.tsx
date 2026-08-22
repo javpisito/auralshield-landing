@@ -3,15 +3,16 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Logo from './Logo';
 import SquashHamburger from './SquashHamburger';
 import ScrambleText from './ScrambleText';
-import { P9, TIENDA, ULTRAPODS, linkTienda } from '../products';
+import { useCarrito } from '../cart';
+import { TIENDA } from '../products';
 
 // Menos rebote que el original (350/28): la píldora ya no oscila al abrir.
 const PILL_SPRING = { type: 'spring' as const, stiffness: 260, damping: 34 };
 
 const NAV_LINKS = [
-  { label: P9.nombre.replace('Audífonos ', ''), target: '#p9' },
-  { label: ULTRAPODS.nombre, target: '#ultrapods' },
-  { label: 'Comparar', target: '#comparar' },
+  { label: 'Producto', target: '#p9' },
+  { label: 'Colores', target: '#colores' },
+  { label: 'Preguntas', target: '#preguntas' },
 ];
 
 const scrollToId = (id: string) => {
@@ -44,29 +45,37 @@ function NavLink({
   );
 }
 
-function BuyButton({ mobile = false }: { mobile?: boolean }) {
+function CartButton({ mobile = false }: { mobile?: boolean }) {
   const [hovered, setHovered] = useState(false);
+  const { unidades, abrir } = useCarrito();
 
   return (
-    <motion.a
-      href={linkTienda()}
-      target="_blank"
-      rel="noopener noreferrer"
+    <motion.button
+      type="button"
+      onClick={abrir}
+      aria-label={`Abrir carrito (${unidades} ${unidades === 1 ? 'unidad' : 'unidades'})`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       whileHover={{ backgroundColor: '#2b2622' }}
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.2 }}
       style={{ backgroundColor: '#12100e' }}
-      // El anillo claro define el botón sobre el hero oscuro y es invisible
-      // sobre las secciones claras.
-      className={`flex shrink-0 items-center gap-2 rounded-full text-bone ring-1 ring-bone/25 ${
+      className={`relative flex shrink-0 items-center gap-2 rounded-full text-bone ${
         mobile ? 'h-9 px-3.5 text-[12px]' : 'h-12 px-6 text-[15px]'
       }`}
     >
-      <i className={`bi bi-whatsapp ${mobile ? 'text-[12px]' : 'text-[14px]'}`} />
-      <ScrambleText text="Pedir" isHovered={hovered} className="whitespace-nowrap" />
-    </motion.a>
+      <i className={`bi bi-bag ${mobile ? 'text-[12px]' : 'text-[14px]'}`} />
+      <ScrambleText text="Carrito" isHovered={hovered} className="whitespace-nowrap" />
+      {unidades > 0 && (
+        <span
+          className={`ml-0.5 flex items-center justify-center rounded-full bg-gold-soft font-bold text-ink ${
+            mobile ? 'h-4 min-w-4 px-1 text-[10px]' : 'h-5 min-w-5 px-1.5 text-[11px]'
+          }`}
+        >
+          {unidades}
+        </span>
+      )}
+    </motion.button>
   );
 }
 
@@ -167,7 +176,7 @@ export default function Navbar({ entranceComplete }: NavbarProps) {
           </motion.div>
         </div>
 
-        <BuyButton />
+        <CartButton />
       </div>
 
       {/* Móvil */}
@@ -226,7 +235,7 @@ export default function Navbar({ entranceComplete }: NavbarProps) {
           </motion.div>
         </div>
 
-        <BuyButton mobile />
+        <CartButton mobile />
       </div>
     </motion.nav>
   );
