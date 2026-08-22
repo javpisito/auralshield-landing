@@ -38,8 +38,8 @@ interface CarritoCtx {
   cerrar: () => void;
   /** URL de la pasarela, o null si todavía no está configurada. */
   urlPasarela: string | null;
-  /** Pedido por WhatsApp, se usa cuando no hay pasarela. */
-  urlWhatsapp: string;
+  /** Pedido por WhatsApp, se usa cuando no hay pasarela. Null si no hay número. */
+  urlWhatsapp: string | null;
 }
 
 const Ctx = createContext<CarritoCtx | null>(null);
@@ -119,7 +119,7 @@ export function CarritoProvider({ children }: { children: ReactNode }) {
       : 'Hola, quiero pedir los Audífonos P9.';
     const urlWhatsapp = TIENDA.whatsapp
       ? `https://wa.me/${TIENDA.whatsapp}?text=${encodeURIComponent(mensaje)}`
-      : '#';
+      : null;
 
     return {
       items,

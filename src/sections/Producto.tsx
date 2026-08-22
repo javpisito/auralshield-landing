@@ -17,7 +17,7 @@ export default function Producto() {
   };
 
   return (
-    <section id="p9" className="w-full bg-paper px-6 py-24 sm:py-28">
+    <section id="p9" className="w-full scroll-mt-24 bg-paper px-6 py-24 sm:py-28">
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-16">
           {/* Imagen del color elegido */}
@@ -37,7 +37,7 @@ export default function Producto() {
               <img
                 src={seleccion.imagen}
                 alt={`${P9.nombre} en color ${seleccion.nombre.toLowerCase()}`}
-                className="absolute inset-0 h-full w-full object-cover"
+                className="absolute inset-0 h-full w-full object-cover object-center"
               />
             </div>
 
@@ -58,7 +58,11 @@ export default function Producto() {
                         : 'border-ink/10 opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={variante.imagen} alt="" className="h-full w-full object-cover" />
+                    <img
+                      src={variante.imagen}
+                      alt=""
+                      className="h-full w-full object-cover object-center"
+                    />
                   </button>
                 );
               })}

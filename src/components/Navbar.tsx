@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Logo from './Logo';
 import SquashHamburger from './SquashHamburger';
@@ -19,15 +19,7 @@ const scrollToId = (id: string) => {
   document.querySelector(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
-function NavLink({
-  label,
-  onClick,
-  mobile = false,
-}: {
-  label: string;
-  onClick: () => void;
-  mobile?: boolean;
-}) {
+function NavLink({ label, onClick }: { label: string; onClick: () => void }) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -36,9 +28,7 @@ function NavLink({
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={`whitespace-nowrap font-normal text-ink/70 transition-colors hover:text-ink ${
-        mobile ? 'text-[12px]' : 'text-[15px]'
-      }`}
+      className="whitespace-nowrap text-[15px] font-normal text-ink/70 transition-colors hover:text-ink"
     >
       <ScrambleText text={label} isHovered={hovered} />
     </button>
@@ -85,17 +75,6 @@ interface NavbarProps {
 
 export default function Navbar({ entranceComplete }: NavbarProps) {
   const [open, setOpen] = useState(false);
-  const mobileRowRef = useRef<HTMLDivElement>(null);
-  const [mobileRowWidth, setMobileRowWidth] = useState(0);
-
-  useLayoutEffect(() => {
-    const measure = () => {
-      if (mobileRowRef.current) setMobileRowWidth(mobileRowRef.current.offsetWidth);
-    };
-    measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
-  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -121,7 +100,7 @@ export default function Navbar({ entranceComplete }: NavbarProps) {
       transition={{ duration: 0.5 }}
       className="fixed left-0 top-0 z-50 h-20 w-full bg-transparent"
     >
-      {/* Escritorio */}
+      {/* Escritorio: la píldora del menú se expande en línea */}
       <div className="mx-auto hidden h-full w-full items-center justify-between px-6 sm:flex md:px-8">
         <div className="flex items-center gap-2">
           <motion.button
@@ -140,8 +119,9 @@ export default function Navbar({ entranceComplete }: NavbarProps) {
             </span>
           </motion.button>
 
+          {/* 380 = 358 que miden los 3 enlaces + holgura por si la fuente tarda en cargar */}
           <motion.div
-            animate={{ width: open ? 330 : 48 }}
+            animate={{ width: open ? 380 : 48 }}
             transition={PILL_SPRING}
             style={pillStyle}
             className={`flex h-12 items-center overflow-hidden rounded-[14px] ${pillClass}`}
@@ -152,7 +132,9 @@ export default function Navbar({ entranceComplete }: NavbarProps) {
               aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
               className={`flex shrink-0 items-center justify-center text-ink transition-colors ${
-                open ? 'ml-1.5 h-9 w-9 rounded-[11px] bg-ink/5 hover:bg-ink/10' : 'h-12 w-12 rounded-[14px]'
+                open
+                  ? 'ml-1.5 h-9 w-9 rounded-[11px] bg-ink/5 hover:bg-ink/10'
+                  : 'h-12 w-12 rounded-[14px]'
               }`}
             >
               <SquashHamburger isOpen={open} />
@@ -179,64 +161,60 @@ export default function Navbar({ entranceComplete }: NavbarProps) {
         <CartButton />
       </div>
 
-      {/* Móvil */}
+      {/*
+        Móvil: nada se expande en línea. Los 3 enlaces no caben junto al
+        hamburguesa y el carrito en 375 px, así que abren en un panel debajo.
+      */}
       <div className="flex h-full w-full items-center justify-between gap-2 px-4 sm:hidden">
-        <div ref={mobileRowRef} className="flex min-w-0 flex-1 items-center gap-2">
-          <motion.div
-            animate={{ width: open ? 0 : 104, opacity: open ? 0 : 1 }}
-            transition={PILL_SPRING}
+        <div className="flex min-w-0 items-center gap-2">
+          <div
             style={pillStyle}
-            className={`flex h-9 shrink-0 items-center gap-1.5 overflow-hidden rounded-[10px] px-3 ${pillClass}`}
+            className={`flex h-9 min-w-0 items-center gap-1.5 rounded-[10px] px-3 ${pillClass}`}
           >
             <Logo size={14} className="shrink-0 text-ink" />
-            <span className="whitespace-nowrap text-[11px] font-bold tracking-[0.08em] text-ink">
-              {TIENDA.nombre.split(' ')[0]}
+            <span className="truncate text-[11px] font-bold tracking-[0.08em] text-ink">
+              {TIENDA.nombre}
             </span>
-          </motion.div>
+          </div>
 
-          <motion.div
-            animate={{ width: open ? mobileRowWidth || 240 : 36 }}
-            transition={PILL_SPRING}
+          <button
+            type="button"
+            aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
             style={pillStyle}
-            className={`flex h-9 shrink-0 items-center overflow-hidden rounded-[10px] ${pillClass}`}
+            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] text-ink ${pillClass}`}
           >
-            <button
-              type="button"
-              aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
-              aria-expanded={open}
-              onClick={() => setOpen((v) => !v)}
-              className={`flex shrink-0 items-center justify-center text-ink transition-colors ${
-                open ? 'ml-1 h-7 w-7 rounded-[8px] bg-ink/5' : 'h-9 w-9 rounded-[10px]'
-              }`}
-            >
-              <SquashHamburger isOpen={open} mobile />
-            </button>
-
-            <AnimatePresence>
-              {open && (
-                <motion.div
-                  initial={{ opacity: 0, x: 15 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 15 }}
-                  transition={{ duration: 0.2, delay: 0.04 }}
-                  className="flex items-center gap-4 px-3"
-                >
-                  {NAV_LINKS.map((link) => (
-                    <NavLink
-                      key={link.label}
-                      label={link.label}
-                      mobile
-                      onClick={() => go(link.target)}
-                    />
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
+            <SquashHamburger isOpen={open} mobile />
+          </button>
         </div>
 
         <CartButton mobile />
       </div>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            style={{ backgroundColor: 'rgba(255,254,252,0.96)' }}
+            className={`absolute left-4 right-4 top-[68px] flex flex-col overflow-hidden rounded-2xl sm:hidden ${pillClass}`}
+          >
+            {NAV_LINKS.map((link) => (
+              <button
+                key={link.label}
+                type="button"
+                onClick={() => go(link.target)}
+                className="border-b border-ink/10 px-5 py-4 text-left text-[14px] text-ink/80 transition-colors last:border-b-0 active:bg-ink/5"
+              >
+                {link.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 }

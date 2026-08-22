@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Logo from '../components/Logo';
 import ScrambleText from '../components/ScrambleText';
-import MediaSlot from '../components/MediaSlot';
 import { MEDIA } from '../media';
 import { useCarrito } from '../cart';
 import { P9, TIENDA, VARIANTES, precioCOP } from '../products';
@@ -13,8 +12,13 @@ export default function Footer() {
   return (
     <footer className="relative w-full overflow-hidden bg-bone">
       <div className="flex min-h-[440px] flex-col md:flex-row">
-        <div className="relative h-[300px] w-full md:h-auto md:w-1/2">
-          <MediaSlot slot={MEDIA.footer} />
+        <div className="relative h-[320px] w-full md:h-auto md:w-1/2">
+          <img
+            src={MEDIA.footer.src}
+            alt={MEDIA.footer.alt}
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
         </div>
 
         <div className="flex w-full flex-col justify-between p-10 sm:p-16 md:w-1/2">

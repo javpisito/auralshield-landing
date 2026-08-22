@@ -28,7 +28,8 @@ export default function App() {
         <Hero entranceComplete={entranceComplete} />
         <TrustStrip />
         <Producto />
-        <div id="colores">
+        {/* scroll-mt-24 evita que el título quede detrás de la barra fija */}
+        <div id="colores" className="scroll-mt-24">
           <Showcase />
         </div>
         <Faq />

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import ScrambleIn from '../components/ScrambleIn';
 import ScrambleText from '../components/ScrambleText';
-import MediaSlot from '../components/MediaSlot';
 import { MEDIA } from '../media';
 import { P9, VARIANTES, precioCOP } from '../products';
 
@@ -79,49 +78,42 @@ export default function Hero({ entranceComplete }: HeroProps) {
               <span className="text-gold-soft">{precioCOP(P9.precio)}</span>
             </button>
 
-            <div className="flex items-center gap-2">
-              <div className="flex -space-x-1.5">
-                {VARIANTES.map((v) => (
-                  <span
-                    key={v.id}
-                    title={v.nombre}
-                    style={{ backgroundColor: v.hex }}
-                    className="h-6 w-6 rounded-full border border-paper"
-                  />
-                ))}
-              </div>
-              <span className="text-[12px] text-ink/45">6 colores</span>
-            </div>
+            <p className="text-[12px] text-ink/45">Pago contra entrega · Garantía incluida</p>
           </motion.div>
         </div>
 
-        {/* Fotos */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="relative col-span-2 aspect-[4/3] overflow-hidden rounded-2xl border border-ink/10 bg-paper">
-            <MediaSlot slot={MEDIA.heroImagen} />
-          </div>
-
-          <div className="relative aspect-square overflow-hidden rounded-2xl border border-ink/10 bg-paper">
-            <MediaSlot slot={MEDIA.heroSecundaria} />
+        {/* Foto */}
+        <div className="flex flex-col gap-3">
+          {/* La foto es cuadrada en origen, así que el marco también: no se recorta nada. */}
+          <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-ink/10 bg-paper">
+            <img
+              src={MEDIA.heroImagen.src}
+              alt={MEDIA.heroImagen.alt}
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
           </div>
 
           <button
             type="button"
             onClick={irAlProducto}
-            className="flex aspect-square flex-col items-start justify-between rounded-2xl border border-ink/10 bg-paper p-5 text-left transition-colors hover:bg-ink/[0.03]"
+            className="flex items-center justify-between gap-4 rounded-2xl border border-ink/10 bg-paper px-5 py-4 text-left transition-colors hover:bg-ink/[0.03]"
           >
-            <span className="text-[12px] uppercase tracking-[0.16em] text-ink/40">Disponible</span>
-            <span className="flex flex-wrap gap-1.5">
-              {VARIANTES.map((v) => (
-                <span
-                  key={v.id}
-                  style={{ backgroundColor: v.hex }}
-                  className="h-5 w-5 rounded-full border border-ink/15"
-                />
-              ))}
+            <span className="flex items-center gap-3">
+              <span className="flex -space-x-1.5">
+                {VARIANTES.map((v) => (
+                  <span
+                    key={v.id}
+                    style={{ backgroundColor: v.hex }}
+                    className="h-6 w-6 rounded-full border border-paper"
+                  />
+                ))}
+              </span>
+              <span className="text-[12px] uppercase tracking-[0.14em] text-ink/45">
+                {VARIANTES.length} colores
+              </span>
             </span>
-            <span className="flex items-center gap-2 text-[13px] text-ink">
-              Ver los 6 colores
+            <span className="flex shrink-0 items-center gap-2 text-[13px] text-ink">
+              Ver todos
               <i className="bi bi-arrow-right text-[13px]" />
             </span>
           </button>

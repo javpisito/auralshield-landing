@@ -23,6 +23,7 @@ export default function CartDrawer() {
 
   const destino = urlPasarela ?? urlWhatsapp;
   const etiquetaPago = urlPasarela ? 'Ir a pagar' : 'Enviar pedido por WhatsApp';
+  const iconoPago = urlPasarela ? 'bi-lock' : 'bi-whatsapp';
 
   return (
     <AnimatePresence>
@@ -141,15 +142,24 @@ export default function CartDrawer() {
                     <span className="text-[24px] font-light text-ink">{precioCOP(total)}</span>
                   </div>
 
-                  <a
-                    href={destino}
-                    target={destino.startsWith('http') ? '_blank' : undefined}
-                    rel="noopener noreferrer"
-                    className="flex h-14 w-full items-center justify-center gap-3 rounded-full bg-ink text-[15px] text-bone transition-colors hover:bg-[#2b2622]"
-                  >
-                    <i className={`bi ${urlPasarela ? 'bi-lock' : 'bi-whatsapp'} text-[15px]`} />
-                    {etiquetaPago}
-                  </a>
+                  {destino ? (
+                    <a
+                      href={destino}
+                      className="flex h-14 w-full items-center justify-center gap-3 rounded-full bg-ink text-[15px] text-bone transition-colors hover:bg-[#2b2622]"
+                    >
+                      <i className={`bi ${iconoPago} text-[15px]`} />
+                      {etiquetaPago}
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled
+                      className="flex h-14 w-full cursor-not-allowed items-center justify-center gap-3 rounded-full bg-ink/30 text-[15px] text-bone"
+                    >
+                      <i className="bi bi-lock text-[15px]" />
+                      Ir a pagar
+                    </button>
+                  )}
 
                   <p className="mt-4 text-center text-[11px] leading-relaxed text-ink/40">
                     Envío a todo Colombia · Pago contra entrega disponible

@@ -45,7 +45,7 @@ export default function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="preguntas" className="w-full bg-paper px-6 py-24 sm:py-28">
+    <section id="preguntas" className="w-full scroll-mt-24 bg-paper px-6 py-24 sm:py-28">
       <div className="mx-auto max-w-3xl">
         <motion.p
           initial={{ opacity: 0 }}

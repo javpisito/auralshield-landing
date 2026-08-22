@@ -7,12 +7,13 @@
  */
 
 export const TIENDA = {
-  /** ← CAMBIA ESTO por el nombre de tu tienda. Aparece en la barra y el footer. */
-  nombre: 'TU MARCA',
+  nombre: 'AURALSHIELD',
   /** Teléfono de WhatsApp con indicativo, sin espacios ni +. Ej: '573001234567'.
-   *  Si lo dejas vacío, los botones de WhatsApp no abren nada. */
+   *  Si lo dejas vacío, la página oculta sola todo lo relacionado con WhatsApp. */
   whatsapp: '',
   ciudad: 'Bogotá',
+  /** Dominio donde vive esta landing. Se usa para las etiquetas de compartir. */
+  sitio: 'https://auralshield.com',
 };
 
 /**
@@ -104,9 +105,15 @@ export const VARIANTES: Variante[] = [
 
 export const P9 = {
   id: 'p9',
-  nombre: 'Audífonos P9',
+  /**
+   * En Shopify el producto se llama "Aura Max — P9 Series". Lo dejamos casi
+   * igual para que el cliente reconozca el mismo producto al llegar al
+   * checkout; si quieres que coincida al 100 %, usa el nombre completo.
+   */
+  nombre: 'Aura Max P9',
   tagline: 'Over-ear con cancelación de ruido',
-  precio: 60000,
+  /** Debe coincidir con el precio de Shopify: allí está en $59.900 COP. */
+  precio: 59900,
   precioAntes: null as number | null,
   descripcion:
     'Diseño moderno, sonido envolvente y comodidad total para que disfrutes tu música, llamadas y contenido sin interrupciones.',
@@ -147,14 +154,7 @@ export const P9 = {
   porConfirmar: ['Horas de batería', 'Versión de Bluetooth', 'Peso', 'Tamaño del driver'],
 };
 
-/** Formatea 60000 → "$60.000" */
+/** Formatea 59900 → "$59.900" */
 export const precioCOP = (valor: number) => `$${valor.toLocaleString('es-CO')}`;
 
 export const variantePorId = (id: string) => VARIANTES.find((v) => v.id === id);
-
-/** Link de WhatsApp genérico, sin producto específico. */
-export const linkTienda = () => {
-  if (!TIENDA.whatsapp) return '#';
-  const mensaje = 'Hola, quiero más información sobre los Audífonos P9.';
-  return `https://wa.me/${TIENDA.whatsapp}?text=${encodeURIComponent(mensaje)}`;
-};

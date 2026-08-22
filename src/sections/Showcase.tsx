@@ -26,8 +26,6 @@ export default function Showcase() {
     return () => observer.disconnect();
   }, []);
 
-  if (!MEDIA.showcaseVideo.src) return null;
-
   return (
     <section className="relative w-full overflow-hidden bg-bone">
       <div className="relative h-[62vh] min-h-[380px] w-full sm:h-[70vh] md:h-[80vh]">
@@ -40,7 +38,7 @@ export default function Showcase() {
           playsInline
           preload="metadata"
           aria-label={MEDIA.showcaseVideo.alt}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
 
         <div
